@@ -62,6 +62,12 @@ int main()
      cout << "The number you guessed is correct. You guessed the number in " << tries << " tries." << endl << endl;
      cout << "Do you want to play again y/n?";
      cin >> playAgain;
+     // reset the random number
+     srand(time(0));
+     computerNum = rand() % 100 + 1;
+     // reset number of tries
+     tries = 0;
+
    }
    if (playAgain == 'n')
    {
