@@ -28,10 +28,11 @@ int main()
  
  //remove all spaces and punction from input and copy the result to new array
  for (int i = 0; i <= strlen(palindromeArr) - 1; i++)
+ //remove all spaces and punction from Array
  {
- 
    if ((tolower(palindromeArr[i]) != ' ' ) && (ispunct(tolower(palindromeArr[i]))== 0))
    {
+
      palindromeArr2[k] = tolower(palindromeArr[i]);
      k++;
    }
@@ -45,7 +46,7 @@ int main()
  int midpoint = length / 2;
 
  //palindrome or not variable
- bool ispalindrome = true;
+ bool ispalindrome = false;
 
  //check whether the input is polidrom or not by comparing the character from the begining and from the end until the middle point
 
@@ -54,9 +55,9 @@ int main()
  for (int x = 0; x < midpoint; x++)
  {
 
-   if (palindromeArr2[x] != palindromeArr2[y])
+   if (palindromeArr2[x] == palindromeArr2[y])
    {
-     ispalindrome = false;
+     ispalindrome = true;
      break;
    }
    y--;
