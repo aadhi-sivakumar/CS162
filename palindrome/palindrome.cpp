@@ -30,7 +30,7 @@ int main()
  for (int i = 0; i <= strlen(palindromeArr) - 1; i++)
  {
  
-   if ((tolower(palindromeArr2[i]) != ' ' ) && (ispunct(tolower(palindromeArr[i]))== 0))
+   if ((tolower(palindromeArr[i]) != ' ' ) && (ispunct(tolower(palindromeArr[i]))== 0))
    {
      palindromeArr2[k] = tolower(palindromeArr[i]);
      k++;
