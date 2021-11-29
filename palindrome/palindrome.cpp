@@ -31,7 +31,6 @@ int main()
  {
  
    if ((tolower(palindromeArr[i]) != ' ' ) && (ispunct(tolower(palindromeArr[i]))== 0))
-     cout << arr[i] << endl; 
    {
      palindromeArr2[k] = tolower(palindromeArr[i]);
      k++;
