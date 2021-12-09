@@ -7,13 +7,16 @@ using namespace std;
 class dm
 {
 	public:
+		char* getMtype();
+                void setMtype(char* ty);
 		void setTitle(char* t);
                 char*  getTitle();                
 		void setyear(int yr);
   		int getyear();
 
 	protected:
- 		int year;
+ 	        char mtype[10];
+		int year;
                 char title[255];
 
 };

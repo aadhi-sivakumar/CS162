@@ -11,7 +11,6 @@ public:
    int getRating();
    void setPublisher(char* pub);
    char* getPublisher();
-
 protected:
  int rating;
  char publisher[255];

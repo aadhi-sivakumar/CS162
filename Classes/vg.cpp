@@ -23,4 +23,3 @@ void vg::setPublisher(char* pub)
 }
 
 
-
