@@ -12,7 +12,7 @@ public:
    char* getPublisher();
    void setDuration(int duration);
    int getDuration();
-
+   ~music();
 protected:
  char artist[255];
  int duration;

@@ -1,7 +1,8 @@
-
 #include <iostream>
 #include "movies.h"
 #include <string.h>
+
+movies::~movies(){};
 
 char* movies::getDirector()
 {

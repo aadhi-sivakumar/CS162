@@ -7,6 +7,7 @@ using namespace std;
 class movies: public dm
 {
 public:
+   ~movies();
    void setRating(int r);
    int getRating();
    void setDirector(char* d);

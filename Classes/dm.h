@@ -1,4 +1,3 @@
-
 #ifndef DM_H
 #define DM_H
 #include <iostream>
@@ -13,7 +12,7 @@ class dm
                 char*  getTitle();                
 		void setyear(int yr);
   		int getyear();
-
+                ~dm();
 	protected:
  	        char mtype[10];
 		int year;

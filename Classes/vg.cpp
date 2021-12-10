@@ -2,6 +2,7 @@
 #include "vg.h"
 #include <string.h>
 
+vg::~vg(){};
 void vg::setRating(int r)
 {
   rating = r;

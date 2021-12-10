@@ -3,6 +3,7 @@
 #include "music.h"
 #include <string.h>
 
+music::~music(){};
 char* music::getArtist()
 {
 	return artist;

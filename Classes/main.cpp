@@ -5,18 +5,21 @@
 #include "music.h"
 #include "movies.h"
 
+//declarations
 void displayMenu();
 int getMediaType();
 void getStoreVg();
 void getStoreMusic();
 void getStoreMovies();
-void searchAndPrintMedia();
+dm*  searchMedia(int& pos);
+void printMedia();
 void deleteMedia();
 vector<dm*> storage;
 
 int main() 
 {
     char choice[10];
+    //shows dislay menu and performs a function based on user's input
     do
     {
       displayMenu();
@@ -32,15 +35,14 @@ int main()
         int  mediaType = getMediaType();
         switch(mediaType)
         {
-         case 1: getStoreVg();
-         case 2: getStoreMusic();
-         case 3: getStoreMovies();
+         case 1: getStoreVg();break;
+         case 2: getStoreMusic();break;
+         case 3: getStoreMovies();break;
         }
       }
       else if(strcmp(choice, "SEARCH") == 0)
       { 
-         searchAndPrintMedia();
-
+         printMedia();
       }
       else if (strcmp(choice, "DELETE") == 0)
       {
@@ -56,23 +58,26 @@ int main()
        cout << "Invalid Input, please enter a valid option" << endl; 
     }
   }
+
   while(strcmp(choice, "QUIT") != 0);
 
   return 0;
 } 
 void displayMenu()
 {
-    cout << "Welcome to the Digital Media Database!" << endl << endl;
+    cout << endl << "Welcome to the Digital Media Database!" << endl << endl;
     cout << "Type 'ADD' if you want to add media or information in each field" << endl;
     cout << "Type 'Search' to search for and print objects currently in the media database by the title or the year" << endl;
     cout << "Type 'Delete' to delete an item by the title or the year"<< endl;
     cout << "Type 'Quit' to quit the program" << endl;
+    
 }
 
 int getMediaType()
 {
    int Mtype; 
    cout << endl << endl;
+   //getting media type from the user to add
    cout << "Type '1' to add Video Games" << endl;
    cout << "Type '2' to add Music" << endl;
    cout << "Type '3' to add Movies" << endl;
@@ -87,6 +92,7 @@ void getStoreVg()
  char title[255];
  int rating;
  char pub[255];
+ char mtypeVg[10] = "vg";
 
  cout << endl << "Enter Video Game details" << endl;
  cout << "Enter Year: " ; 
@@ -100,9 +106,9 @@ void getStoreVg()
  cin.ignore();
  cin.getline(pub,255);
  
- 
+ //push video game details into the vector
  vg* objvg = new vg();
- objvg->setMtype("vg");
+ objvg->setMtype(mtypeVg);
  objvg->setyear(year);
  objvg->setTitle(title);
  objvg->setRating(rating);
@@ -118,7 +124,8 @@ void getStoreMusic()
  char artist[255];
  int duration;  
  char pub[255];
-
+ char mtypeMusic[10] = "music";
+ 
  cout << endl << "Enter Music  details" << endl;
  cout << "Enter Year: " ; 
  cin >> year;
@@ -134,8 +141,9 @@ void getStoreMusic()
  cin.ignore();
  cin.getline(pub,255);
  
+ //push music details into the vector
  music* objmusic = new music();
- objmusic->setMtype("music");
+ objmusic->setMtype(mtypeMusic);
  objmusic->setyear(year);
  objmusic->setTitle(title);
  objmusic->setArtist(artist);
@@ -152,6 +160,7 @@ void getStoreMovies()
  int duration;  
  int rating;
  char director[255];
+ char mtypeMovies[10] = "movies";
 
  cout << endl << "Enter Movies  details" << endl;
  cout << "Enter Year: " ; 
@@ -163,12 +172,13 @@ void getStoreMovies()
  cin >> duration;
  cout << "Enter rating: ";
  cin >> rating; 
-cout <<  "Enter Director: "; 
+ cout <<  "Enter Director: "; 
  cin.ignore();
  cin.getline(director,255);
 
+ //pushes the movies detail's into the vector
  movies* objmovies = new movies();
- objmovies->setMtype("movies");
+ objmovies->setMtype(mtypeMovies);
  objmovies->setyear(year);
  objmovies->setTitle(title);
  objmovies->setDirector(director);
@@ -177,12 +187,16 @@ cout <<  "Enter Director: ";
  storage.push_back(objmovies);
 }
 
-void searchAndPrintMedia()
-{
+dm* searchMedia(int& pos)
+{  
+ 
          int searchType;
+	 bool found = false;
+         dm* objfound = NULL; 
          int year;
          char title[255];
          cout << endl;
+	 //asking user to type a field in order to search media
          cout << "Type 1 to search by Year" << endl;
          cout << "Type 2 to search by Title" << endl;
          cout << "Type 3 to search by Year and Title" << endl;
@@ -208,8 +222,7 @@ void searchAndPrintMedia()
                   cin.getline(title, 255);
  		 } break;
          }
-	bool found = false;
-        dm* objfound; 
+	 //runs through the storage and sets boolean to true if the user input and the storage value is the same
 	for(int i = 0; i < storage.size(); i++)
 	{
 		if ((searchType == 1) &&  (storage[i]->getyear() == year)) 
@@ -227,7 +240,20 @@ void searchAndPrintMedia()
 	  		found = true;
 		        objfound = (dm*)storage[i];
                 }
+	        pos = i; 
 	
+       }
+       return objfound;
+       
+}
+
+void printMedia()
+{
+   int pos;
+   // same method as search media
+   dm* objfound = searchMedia(pos);
+   if (objfound != NULL)
+   {
                if (strcmp(objfound->getMtype(), "vg")==0)
                {	
 	  		vg* objvg2 = (vg*)objfound; 
@@ -245,14 +271,52 @@ void searchAndPrintMedia()
  			movies* objmovies2 = (movies*)objfound; 
  			cout << "Title = " << objmovies2->getTitle() << endl <<  "Year = " <<  objmovies2->getyear() <<  endl << "Director = " << objmovies2->getDirector() << endl << "Rating = " << objmovies2->getRating() << endl <<  "Duration = " << objmovies2->getDuration() << endl << endl;
          	 }	
-	}
-       //check found or not
-       if (!found)
-       {
+   }
+   else
+   {
            cout << endl << "The media that you searched is not found! Try again" << endl;
-       }
-}
+    }
+}  
 void deleteMedia()
 {
+  int pos;
+  dm* objfound = searchMedia(pos);
+  char delConfirm = 'N';
+  if (objfound != NULL)
+  {
+      cout << "Are you sure delete the selected media<Y/N>?" << endl;
+      cin >> delConfirm;
+      if (toupper(delConfirm) == 'Y')
+      {
+         // remove from the vector
+         storage.erase(storage.begin() + pos);
+ 
+        // call appropriate destructor to remove the object and free the memory space
+
+         if (strcmp(objfound->getMtype(),"vg")==0)
+         {
+	     delete (vg*)objfound;
+	 }
+         if (strcmp(objfound->getMtype(),"music")==0)
+         {
+	     delete (music*)objfound;
+	 }
+         else if (strcmp(objfound->getMtype(),"movies")==0)
+         {
+	     delete (movies*)objfound;
+	 }
+	 cout << "Selected Media Object is removed from the Media Database" << endl;
+      }
+      else
+      {
+        cout << "Selected Media Object is not removed from the Media Database" << endl;
+      }
+  }
+  else
+  {
+      cout << endl << "The media that you searched is not found! Try again" << endl;
+	
+  }
 }
+
 

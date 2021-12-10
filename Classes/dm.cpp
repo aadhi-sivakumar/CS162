@@ -2,6 +2,8 @@
 #include <string.h>
 #include "dm.h"
 
+dm::~dm(){};
+
 char* dm::getMtype()
 {
  return mtype;
