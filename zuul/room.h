@@ -11,7 +11,6 @@ using namespace std;
 
 class room
 {
-
  private:
   //room variables
   char description[100];
@@ -26,7 +25,7 @@ class room
   vector<char*>* getItems();
   void addItem(char* itemName);
   char* getDescription();
-  void setDescription(char* newDesc);
+  void setDescription(char* newDescription);
   map<const char*, room*>* getMap();
   void setExit(const char* direction, room* neighbor);
 };

@@ -1,21 +1,23 @@
-#include <iostream>
-#include <map>
-#include <iterator>
-#include <cstring>
-#include <vector>
+/*
+Map of Zuul Can be found here: https://github.com/aadhisivakumar/CS162/blob/main/zuul/IMG_8951.jpg
+Sources: Aaron and my dad helped me with the map and the looping within the map along with the website: https://www.geeksforgeeks.org/map-associative-containers-the-c-standard-template-library-stl/. Dad also helped me with the convertToUpper function.
+*/
+
 #include "room.h"
 
 using namespace std;
 
 void printWelcome();
-string convertToUpper(char []);
+char* convertToUpper(char* str);
 int main()
 {
   char noYes[5];
   int i;
   bool notFinished = true;
   vector<char*> inventory;
-  char directionToMove[20];
+  char command[20];
+  int curPos = -1;
+  char response[2];
 
   //welcome message
   printWelcome();
@@ -24,14 +26,14 @@ int main()
   cin >> noYes;
 
  //exits game if user doesn't want to play
-  if (strcmp(noYes, "no") == 0)
+  if (strcmp(convertToUpper(noYes), "NO") == 0)
   {
     cout << "Bad Idea. Your parents are going to be mad." << endl;
     cout << "Exiting Zuul: School Edition." << endl;
     exit(0);
   }
   //initializes game if user wants to play
-  else if (strcmp(noYes, "yes") == 0)
+  else if (strcmp(convertToUpper(noYes), "YES") == 0)
   {
     //room initialization
     room* english = new room();
@@ -134,93 +136,103 @@ int main()
     //setting starting room to english classroom.
     room* currentRoom = english;
 
+   //keep looping while the user hasn't quit the game or won
     while(notFinished)
-    {//keep going while the user hasn't quit or won the game
+    {
 
-      //print the room and items in the room
-      cout << endl << "You are in: " << currentRoom->getName() << endl;
+      //print the room you are located in and the items in the room
+      cout << endl << "You are located in: " << currentRoom->getName() << endl;
 
+      //loop through the items in the current room and print them
       for(vector<char*>::iterator it = currentRoom->getItems()->begin();it < currentRoom->getItems()->end();it++)
-      {//loop through the items in the current room and print them
-        cout << "Items in the room: ";
+      {
+        cout << "The item in the room is a: ";
         cout << (*it) << " " << endl;
       }
-      cout << "Room Description: " << currentRoom->getDescription() << endl;//print the description
-      int curPos = -1;
-      
+      cout << "Room Description: " << currentRoom->getDescription() << endl;
+
+      //loop through the items in the room and asks the use if they would like to pick it up
       for(vector<char*>::iterator it = currentRoom->getItems()->begin();it < currentRoom->getItems()->end();it++)
-      {//loop through the items in the room and ask if they would like to pick it up
+      {
         curPos++;
-        char answer[80];
-        cout << "Would you like to pick up: " << (*it) << "? (Y/N)" << endl;
-        cin >> answer;
-        if(strcmp(answer, "Y") == 0)
+        cout << "Would you like to pick up the " << (*it) << "? (Y/N)" << endl;
+        cin >> response;
+        if(strcmp(convertToUpper(response), "Y") == 0)
         {//put it in the inventory and remove it from the room
           inventory.push_back((*it));
-                currentRoom->getItems()->erase(it);
+          currentRoom->getItems()->erase(it);
           break;
         }
-        else if(strcmp(answer, "N") == 0)
+        else if(strcmp(convertToUpper(response), "N") == 0)
         {
           continue;
         }
         else
         {
-          cout << "That is not a valid command, make sure you typed 'Y' or 'N'" << endl;
-          cout << "Leave the room and come back to attempt to pick it up again" << endl;
+          cout << "That is not a valid response, please type in 'Y' or 'N'" << endl;
+          cout << "Exit the room and come back to the room to attempt to pick up the item again" << endl;
         }
       }
 
-      if(inventory.size() == 5)
-      {//win condition
-        cout << "Good job on finding all of your missing school supplies!" << endl;
-        cout << "Congratulations you have won Zuul: School Edition" << endl;
-        break;
-      }
+      //statement to check if the user wants to drop an item
       if(inventory.size() > 0)
-      {//checking if the user would like to drop their items
-        char drop[25];
+      {
         curPos = -1;
+        //loops through invetory of items
         for(vector<char*>::iterator itr = inventory.begin(); itr != inventory.end(); itr++)
         {
           curPos++;
-          cout << "Would you like to drop your "  << *itr << "?(Y/N)" << endl;
-          cin>> drop;
-          if(strcmp(drop, "Y") == 0)
+          cout << "Would you like to drop your "  << *itr << " in this room?(Y/N)" << endl;
+          cin >> response;
+          if(strcmp(convertToUpper(response), "Y") == 0)
           {
             currentRoom->getItems()->push_back(*itr);
             inventory.erase(itr);
             break;
           }
-          else if(strcmp(drop, "N") == 0)
+          else if(strcmp(convertToUpper(response), "N") == 0)
           {
             continue;
           }
           else
           {
-          cout << "That is not a valid option. Please make sure you type 'Y' or 'N'" << endl;
+          cout << "That is not a valid response. Please type in 'Y' or 'N'" << endl;
           }
         }
       }
-      //printing out the exits of the room
+
+      //prints out the exits of the room
       cout << endl << "Exits are: " << endl;
       for(map<const char*, room*>::iterator it  = currentRoom->getMap()->begin(); it != currentRoom->getMap()->end(); it++)
       {
         cout <<it->first << ", " << it->second->getName() << endl;
       }
+
+      //win condition
+      if(inventory.size() == 5)
+      {
+        cout << "Good job on finding all of your missing school supplies!" << endl;
+        cout << "Congratulations you have won Zuul: School Edition" << endl;
+        break;
+      }
+
+      //prompts the user if they want to quit the game
       cout << "You have the option to type 'QUIT' to leave the game." << endl;
+      
+      //prompts the user for the direction in which they want to move in
       cout << "Which direction would you like to go in?" << endl;
-      cin >> directionToMove;
-      //prompt the user for what direction they'd like to go in or if they'd like to quit
+      cin >> command;
+    // convertToUpper(command);
       for(map<const char*, room*>::iterator it = currentRoom->getMap()->begin(); it != currentRoom->getMap()->end(); it++)
       {
-        if(strcmp(it->first, directionToMove) == 0)
+        if(strcmp(it->first, convertToUpper(command))== 0)
         {
           currentRoom = it->second;
           break;
         }
       }
-      if(strcmp(directionToMove, "QUIT") == 0)
+      //statement which will execute if user wants to quit. It exits the game
+      if(strcmp(convertToUpper(command), "QUIT") == 0)
       {
         notFinished = false;
         cout << "Your parent's will not be happy about this" << endl;
@@ -230,6 +242,8 @@ int main()
   }
   return 0;
 }
+
+//print welcome function
 void printWelcome()
 {
   cout << "Welcome to Zuul, an adventure game where you must collect items scattered through over a dozen rooms!" << endl << endl;
@@ -240,3 +254,14 @@ void printWelcome()
   cout << "Are you planning on finding your missing school supplies?" << endl;
 }
 
+//converts char* to uppercase letters, dad helped me with this function
+char* convertToUpper(char* str)
+{
+  int i = 0;
+  while(str[i])
+  {
+    str[i] = toupper(str[i]);
+    i++;
+  }
+  return str;
+}

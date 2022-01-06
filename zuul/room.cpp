@@ -1,43 +1,49 @@
 #include "room.h"
-
 using namespace std;
 
-//initializing all the room functions 
+//gets room name
 char* room::getName()
-{//returns the name of a room
+{
   return name;
 }
 
+//sets the room name
 void room::setName(char* newName)
-{//sets the name of the room
+{
   strcpy(name, newName);
 }
 
+//returns the vector of items for the room
 vector<char*>* room::getItems()
-{//returns a vector of items for a room
+{
   return &items;
 }
 
+//adds items to the room
 void room::addItem(char* itemName)
-{//adds items to a room
+{
   items.push_back(itemName);
 }
 
+//returns the description
 char* room::getDescription()
-{//returns the description
+{
   return description;
 }
 
-void room::setDescription(char* newDesc)
-{//sets the description of a room
-  strcpy(description, newDesc);
+//sets the room description
+void room::setDescription(char* newDescription)
+{
+  strcpy(description, newDescription);
 }
 
+//returns the exits of a room based on map
 map<const char*, room*>* room::getMap()
-{//returns the exits of a room
+{
   return &exits;
 }
-
-void room::setExit(const char* direction, room* neighbor){//adds an exit to a room
+///adds exits to room
+void room::setExit(const char* direction, room* neighbor)
+{
   exits.insert(pair<const char*, room*>(direction, neighbor));
 }
