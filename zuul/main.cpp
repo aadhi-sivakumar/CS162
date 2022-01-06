@@ -8,10 +8,14 @@
 using namespace std;
 
 void printWelcome();
-
+string convertToUpper(char []);
 int main()
 {
   char noYes[5];
+  int i;
+  bool notFinished = true;
+  vector<char*> inventory;
+  char directionToMove[20];
 
   //welcome message
   printWelcome();
@@ -32,24 +36,24 @@ int main()
     //room initialization
     room* english = new room();
     english->setName((char*)"English Class");
-    english->setDescription((char*)"It's your least favorite class cause you got caught cheating");
+    english->setDescription((char*)"This is your least favorite class because you were caught plagarizing.");
     room* cafeteria = new room();
     cafeteria->setName((char*)"Cafeteria");
     cafeteria->addItem((char*)"lunchbox");
-    cafeteria->setDescription((char*)"Place where you eat lunch");
+    cafeteria->setDescription((char*)"This is your favorite time because you get to eat lunch.");
     room* history = new room();
     history->setName((char*)"History Class");
-    history->setDescription((char*)"Class where you learn historical events");
+    history->setDescription((char*)"This is the class where you learn historical events");
     room* math = new room();
     math->setName((char*)"Math Class");
     math->addItem((char*)"calculator");
-    math->setDescription((char*)"Most confusing class");
+    math->setDescription((char*)"This is your most confusing class. Numbers...");
     room* robotics = new room();
     robotics->setName((char*)"Robotics class");
-    robotics->setDescription((char*)"This is your favorite class");
+    robotics->setDescription((char*)"This is your favorite class because you get to build robots!");
     room* theatre = new room();
     theatre->setName((char*)"Theatre");
-    theatre->setDescription((char*)"Place where people perform");
+    theatre->setDescription((char*)"This is the place where people perform:)");
     theatre->addItem((char*)"microphone");
     room* office = new room();
     office->setName((char*)"Principals office");
@@ -57,7 +61,7 @@ int main()
     room* science = new room();
     science->setName((char*)"Science Class");
     science->addItem((char*)"beaker");
-    science->setDescription((char*)"Class where you mix chemicals together");
+    science->setDescription((char*)"This is the class where you mix chemicals together");
     room* gym = new room();
     gym->setName((char*)"Gym");
     gym->setDescription((char*)"Exercise Place");
@@ -66,17 +70,17 @@ int main()
     compLab->setDescription((char*)"Coding Area");
     room* spanish = new room();
     spanish->setName((char*)"Spanish Class");
-    spanish->setDescription((char*)"Learn Spanish Here");
+    spanish->setDescription((char*)"This is the class where you learn spanish");
     room* health = new room();
-    health->setName((char*)"health class");
-    health->setDescription((char*)"Health");
+    health->setName((char*)"Health Class");
+    health->setDescription((char*)"You dispise this class because you think it's gross");
     room* band = new room();
     band->setName((char*)"Band Class");
     band->addItem((char*)"instrument");
-    band->setDescription((char*)"Class where I play my clarinet");
+    band->setDescription((char*)"This is the class where you play your clarinet");
     room* french = new room();
     french->setName((char*)"French Class");
-    french->setDescription((char*)"People's least facorite class");
+    french->setDescription((char*)"People's least favorite class");
     room* counsler = new room();
     counsler->setName((char*)"Counsling Office");
     counsler->setDescription((char*)"Place where you can talk about your problems");
@@ -130,28 +134,25 @@ int main()
     //setting starting room to english classroom.
     room* currentRoom = english;
 
-  
-    bool keepGoing = true;
-    vector<char*> inventory;
-    char nextDir[80];
-    while(keepGoing)
+    while(notFinished)
     {//keep going while the user hasn't quit or won the game
 
       //print the room and items in the room
-      cout << "You are in: " << currentRoom->getName() << endl;
-      cout << "Items in the room: ";
+      cout << endl << "You are in: " << currentRoom->getName() << endl;
+
       for(vector<char*>::iterator it = currentRoom->getItems()->begin();it < currentRoom->getItems()->end();it++)
       {//loop through the items in the current room and print them
+        cout << "Items in the room: ";
         cout << (*it) << " " << endl;
       }
-      cout << currentRoom->getDescription() << endl;//print the description
+      cout << "Room Description: " << currentRoom->getDescription() << endl;//print the description
       int curPos = -1;
       
       for(vector<char*>::iterator it = currentRoom->getItems()->begin();it < currentRoom->getItems()->end();it++)
       {//loop through the items in the room and ask if they would like to pick it up
         curPos++;
         char answer[80];
-        cout << "would you like to pick up: " << (*it) << "(Y/N)" << endl;
+        cout << "Would you like to pick up: " << (*it) << "? (Y/N)" << endl;
         cin >> answer;
         if(strcmp(answer, "Y") == 0)
         {//put it in the inventory and remove it from the room
@@ -172,35 +173,56 @@ int main()
 
       if(inventory.size() == 5)
       {//win condition
-      cout << "Good job on finding all of your missing school supplies!" << endl;
+        cout << "Good job on finding all of your missing school supplies!" << endl;
         cout << "Congratulations you have won Zuul: School Edition" << endl;
         break;
       }
       if(inventory.size() > 0)
       {//checking if the user would like to drop their items
-       
+        char drop[25];
+        curPos = -1;
+        for(vector<char*>::iterator itr = inventory.begin(); itr != inventory.end(); itr++)
+        {
+          curPos++;
+          cout << "Would you like to drop your "  << *itr << "?(Y/N)" << endl;
+          cin>> drop;
+          if(strcmp(drop, "Y") == 0)
+          {
+            currentRoom->getItems()->push_back(*itr);
+            inventory.erase(itr);
+            break;
+          }
+          else if(strcmp(drop, "N") == 0)
+          {
+            continue;
+          }
+          else
+          {
+          cout << "That is not a valid option. Please make sure you type 'Y' or 'N'" << endl;
+          }
+        }
       }
       //printing out the exits of the room
-      cout << "Exits are: " << endl;
+      cout << endl << "Exits are: " << endl;
       for(map<const char*, room*>::iterator it  = currentRoom->getMap()->begin(); it != currentRoom->getMap()->end(); it++)
       {
         cout <<it->first << ", " << it->second->getName() << endl;
       }
-      cout << "you can type QUIT to quit as well" << endl;
+      cout << "You have the option to type 'QUIT' to leave the game." << endl;
       cout << "Which direction would you like to go in?" << endl;
-      cin >> nextDir;
+      cin >> directionToMove;
       //prompt the user for what direction they'd like to go in or if they'd like to quit
       for(map<const char*, room*>::iterator it = currentRoom->getMap()->begin(); it != currentRoom->getMap()->end(); it++)
       {
-        if(strcmp(it->first, nextDir) == 0)
+        if(strcmp(it->first, directionToMove) == 0)
         {
           currentRoom = it->second;
           break;
         }
       }
-      if(strcmp(nextDir, "QUIT") == 0)
+      if(strcmp(directionToMove, "QUIT") == 0)
       {
-        keepGoing = false;
+        notFinished = false;
         cout << "Your parent's will not be happy about this" << endl;
         cout << "Exiting Zuul: School Edition" << endl;
       }
@@ -211,9 +233,10 @@ int main()
 void printWelcome()
 {
   cout << "Welcome to Zuul, an adventure game where you must collect items scattered through over a dozen rooms!" << endl << endl;
-  cout << "You are located at Sunset High School's english class waiting for the bell to ring. The time finally comes when it does." << endl;
-  cout << "You are about to head home when you realize you've lost five of your school supplies. Your parents will kill you if they figure out you lost them." << endl;
-  cout << "It's your task to navigate through the 15 classrooms to find these school supplies, or you will be grounded once you come home." << endl;
-  cout << "The school supplies you are searching for are: a calculator, a beaker, a lunchbox, a instument, a lunch box, and finally a lunch box." << endl;
+  cout << "You are located at Sunset High School's english class waiting for the bell to ring. The time finally comes when it does." << endl << endl;
+  cout << "You are about to head home when you realize you've lost five of your school supplies. Your parents will kill you if they figure out you lost them." << endl << endl;
+  cout << "It's your task to navigate through the 15 classrooms to find these school supplies, or you will be grounded once you come home." << endl<< endl ;
+  cout << "The school supplies you are searching for are: a calculator, a beaker, a lunchbox, a instument, a lunch box, and finally a lunch box." << endl << endl;
   cout << "Are you planning on finding your missing school supplies?" << endl;
 }
+

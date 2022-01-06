@@ -38,6 +38,6 @@ map<const char*, room*>* room::getMap()
   return &exits;
 }
 
-void room::setExit(const char* direction, room* newRoom){//adds an exit to a room
-  exits.insert(pair<const char*, room*>(direction, newRoom));
+void room::setExit(const char* direction, room* neighbor){//adds an exit to a room
+  exits.insert(pair<const char*, room*>(direction, neighbor));
 }

@@ -11,6 +11,14 @@ using namespace std;
 
 class room
 {
+
+ private:
+  //room variables
+  char description[100];
+  char name[20];
+  map<const char*, room*> exits;
+  vector<char*> items;
+
  public:
   //function prototypes
   char* getName();
@@ -20,13 +28,7 @@ class room
   char* getDescription();
   void setDescription(char* newDesc);
   map<const char*, room*>* getMap();
-  void setExit(const char* direction, room* newRoom);
- private:
-  //room variables
-  map<const char*, room*> exits;
-  char name[80];
-  vector<char*> items;
-  char description[1000];
+  void setExit(const char* direction, room* neighbor);
 };
 #endif
 
