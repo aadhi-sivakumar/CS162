@@ -10,8 +10,8 @@ class Node
     Node* next;
 
   public:
-    ~Node();
     Node(Student*);
+    ~Node();
     Student* getStudent();
     Node* getNext();
     void setNext(Node*);    

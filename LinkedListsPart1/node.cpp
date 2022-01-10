@@ -23,5 +23,5 @@ Node* Node::getNext()
 }
 void Node::setNext(Node* nextNode)
 {
-  nextNode = nextNode;
+  next = nextNode;
 }
