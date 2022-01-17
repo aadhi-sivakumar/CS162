@@ -1,4 +1,7 @@
 /*
+Name: Aadhi Sivakumar 
+Date: 1/16/2022
+Description: This is a text-based adventure game that has multiple rooms and items you need to collect. If you collect all the items, you win the game.
 Map of Zuul Can be found here: https://github.com/aadhisivakumar/CS162/blob/main/zuul/IMG_8951.jpg
 Sources: Aaron and my dad helped me with the map and the looping within the map along with the website: https://www.geeksforgeeks.org/map-associative-containers-the-c-standard-template-library-stl/. Dad also helped me with the convertToUpper function.
 */
