@@ -1,3 +1,9 @@
+/*
+Name: Aadhi Sivakumar
+Date: 1/16/2021
+Description: Practicing Linked Lists and prints out elements of linked list to show it works
+*/
+
 #include "node.h"
 #include "student.h"
 
@@ -18,16 +24,16 @@ int main()
  print(head);
  Student* Jose = new Student();
  Jose->setFirstName("Jose");
- Aadhi->setLastName("Martinez");
- Aadhi->setStudID(432657);
- Aadhi->setGPA(1.0);
+ Jose->setLastName("Martinez");
+ Jose->setStudID(432657);
+ Jose->setGPA(1.0);
  add(Jose);
  print(head);
  Student* Martin = new Student();
- Aadhi->setFirstName("Martin");
- Aadhi->setLastName("Luther");
- Aadhi->setStudID(456789);
- Aadhi->setGPA(2.5);
+ Martin->setFirstName("Martin");
+ Martin->setLastName("Luther");
+ Martin->setStudID(456789);
+ Martin->setGPA(2.5);
  add(Martin);
  print(head);
 }
