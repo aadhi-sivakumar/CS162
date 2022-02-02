@@ -1,38 +1,37 @@
-#include <iostream>
-#include <cstring>
 #include "Student.h"
+#include <cstring>
 
-using namespace std;
-
-Student::Student() 
-{
-
-}
-
-//Destructor
 Student::~Student() 
-{ 
-	
-}
-
-//Takes in onformation
-char* Student::getFirstName() {
-	return firstName;
-}
-
-char* Student::getLastName() {
-	return lastName;
-}
-
-int Student::getStudID()
 {
-	return studID;
+
 }
 
-float Student::getGPA() {
-	return GPA;
+Student::Student(char* newFirstName, char* newLastName, int newStudID, float newStudGPA) 
+{
+  firstName = new char[50];
+  strcpy(firstName, newFirstName);
+  lastName = new char[50];
+  strcpy(lastName, newLastName);
+  studID = newStudID;
+  studGPA = newStudGPA;
 }
 
-void Student::setInfo() {
+char* Student::getFirstName() 
+{
+  return firstName;
+}
 
+char* Student::getLastName() 
+{
+  return lastName;
+}
+
+int Student::getStudID() 
+{
+  return studID;
+}
+
+float Student::getGPA() 
+{
+  return studGPA;
 }

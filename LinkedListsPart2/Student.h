@@ -1,27 +1,23 @@
-#include <iostream>
-#include <cstring>
-using namespace std;
-
 #ifndef STUDENT_H
 #define STUDENT_H
+#include <iostream>
 
-class Student
+using namespace std;
+
+class Student 
 {
-  private:
-  //initializing variables
-  char firstName[50];
-  char lastName[50];
-  int studID;
-  float GPA;
-
-  public:
-  //function prototypes
-  Student();
+ public:
   ~Student();
+  Student(char* newFirstName, char* newLastName, int newStudID, float newStudGPA);
   char* getFirstName();
   char* getLastName();
   int getStudID();
   float getGPA();
-  void setInfo();
+  float studGPA;
+  
+ private:
+  char* firstName;
+  char* lastName;
+  int studID;
 };
 #endif

@@ -4,33 +4,35 @@ Date: 1/30/22
 Description: //Second part of Linked Lists, using code for node.h and node.o from Nihal Parthasarathy
 */
 
-#include "Node.h"
 #include <cstring>
 #include <iomanip>
+#include "Node.h"
 #include "Student.h"
 using namespace std;
 
 //Function Prototypes
-void add(Node* curr, Node* next, Student* Student);
-void print(Node* head);
-void average(Node* head, int counter);
-void Delete (Node* curr, Node* prev, int studID);
+void addStudent(Node* head, Student* newStudent);
+void printStudents(Node* next);
+void deleteStudent(Node* head, int studID);
+void average(Node* next, int count, float nSum);
 void displayMenu();
 
 int main() 
 {
-  bool finish = false;
+  cout << "Welcome to my linked list" << endl;
+  //user input for option
   char option[10];
   //declaring first head as NULL
   Node* head = NULL;
-  //number of nodes in linked list
-  int ctNode = 0; 
-
+  
   do
 	{
-		displayMenu();
-		cin.getline(option, 10);
-	  
+    //display menu
+    displayMenu();
+
+    //geting user input
+    cin.getline(option, 10);
+    
     // convert the input to upper case	
 		for (int i=0; i < strlen(option); i++)
 		{		
@@ -38,122 +40,159 @@ int main()
 		}	
 
 		// options based on users input for option
+
+    //gets data and add directly if there is an empty list, otherwise calls function add.
 		if (strcmp(option, "ADD") == 0)
 		{
-      
+      char firstName[20];
+      char lastName[20];
+      int studID;
+      float studGPA;
+      cout << "First Name: ";
+      cin >> firstName;
+      cout << "Last Name: ";
+      cin >> lastName;
+      cout << "ID: ";
+      cin >> studID;
+      cout << "GPA: ";
+      cin >> studGPA;
+      Student* newStudent = new Student(firstName, lastName, studID, studGPA);
+      if (head == NULL) 
+      {
+	      head = new Node(newStudent);
+      }
+      else if (head->getStudent()->getStudID() > studID) 
+      {
+	      Node* temp = head;
+	      head = new Node(newStudent);
+      	head->setNext(temp);
+      }
+      else 
+      {
+	      addStudent(head, newStudent);
+      }
+    }
 
-		}
+    //print
 		else if (strcmp(option, "PRINT") == 0)
 		{
-			
+			printStudents(head);
 		}
+
+    //delete
 		else if (strcmp(option, "DELETE") == 0)
 		{
+      if (head == NULL) 
+      {
+	      cout << "There are no students to delete" << endl;
+      } 
+      else 
+      {
+	      int studID;
+      	cout << "ID: ";
+	      cin >> studID;
+	      if (head->getStudent()->getStudID() == studID) 
+        {
+	        Node* temp = head;
+	        head = head->getNext();
+	        delete(temp);
+	      } 
+        else 
+        {
+	        deleteStudent(head, studID);
+		    }
+      }
+    }
 
+    //average
+		else if (strcmp(option, "AVERAGE") == 0) 
+    {
+      int averageCount = 0;
+      int sum = 0;
+      average(head, averageCount, sum);
 		}
-		else if (strcmp(option, "QUIT") == 0)
-		{
-	
-		}
-		else
-		{
-		   cout << "Invalid Input, please enter a valid option" << endl; 
-		}
+    cin.ignore();
+	}		 
+  while(strcmp(option, "QUIT") != 0);
 
-	}
-	while(strcmp(option, "QUIT") != 0);
-	return 0;				
+  
+  cout << "You have exited the program. Goodbye." <<endl;
+  
+  return 0;		
 }
+
 // displays options user can do
 void displayMenu()
 {
-        cout << endl; 
-	cout << "Select an option:" << endl << endl; 
+	cout << endl << "Select an option:" << endl << endl; 
 	cout << "ADD--->Type 'ADD' to add a new student record: " << endl;
-        cout << "PRINT--->Type 'PRINT' to print out all the students currently stored: " << endl;
+  cout << "PRINT--->Type 'PRINT' to print out all the students currently stored: " << endl;
 	cout << "DELETE--->Type 'DELETE' to delete a student ID number from the record: " << endl;
 	cout << "QUIT--->Type 'QUIT' to exit the program: " << endl;
-  cout << "AVERAGE--->Type 'AVERAGE' to print the GPA average of all students:" << endl;
+  cout << "AVERAGE--->Type 'AVERAGE' to print the GPA average of all students:" << endl << endl;
 }
 
-void add(Node* curr, Node* next, Student* Student)
+//add a new node (holding a new student) to the linked list
+void addStudent(Node* head, Student* newStudent) 
 {
-	Node* temp = new Node(Student);
-    // find where it should go based on ID number
-  if (next == NULL)
-  {
-    curr->setNext(temp);
-  }
-  else if (Student->getStudID < next->getStudent()->getStudID()) 
-  {
-    curr->setNext(temp);
-    temp->setNext(next);
-  }
+  Node* curr = head;
+  if (curr->getNext() == NULL || curr->getNext()->getStudent()->getStudID() > newStudent->getStudID())
+  { //once at the end, connect the last node to new node
+    Node* newNode = new Node(newStudent);
+    newNode->setNext(curr->getNext());
+    curr->setNext(newNode);
+  } 
   else 
-  {
-    add(next, next->getNext(), Student);
+  { //recursively search
+    addStudent(head->getNext(), newStudent);
   }
 }
 
-void print(Node* head)
+//print out the student data of every node in the linked list
+void printStudents(Node* next) 
 {
-  Node* currNode = head;
-  if (currNode == NULL) 
-  {
-      cout << "List is empty, you have to add students first to print" << endl;
-    }
-    else 
+  if (next != NULL) 
+  { //while not at the end, print all the data per node then call on next
+    cout << next->getStudent()->getFirstName();
+    cout << " " << next->getStudent()->getLastName();
+    cout << ", ID: " << next->getStudent()->getStudID();
+    cout << ", GPA: " << fixed << setprecision(2) << next->getStudent()->getGPA() << endl;
+    printStudents(next->getNext());
+  }
+}
+
+//delete the node of the student with the given id
+void deleteStudent(Node* current, int studID) 
+{
+  if (current->getNext() != NULL) 
+  { //search the next node's data (as long as it is not NULL)
+    if (current->getNext()->getStudent()->getStudID() == studID) 
     {
-      cout << "Printing students:" << endl;
-      while (currNode != NULL) 
-      {
-        cout << currNode->getStudent()->getFirstName() << " ";
-        cout << currNode->getStudent()->getLastName() << ", ";
-        cout << "ID: " << currNode->getStudent()->getStudID() << ", ";
-        cout << "GPA: " << fixed << setprecision(2) << currNode->getStudent()->getGPA() << endl;
-        currNode = currNode->getNext();
-        }
+      Node* temp = current->getNext();
+      current->setNext(temp->getNext());
+      delete(temp);
+    } 
+    else 
+    { //recursively search only if no match
+      deleteStudent(current->getNext(), studID);
     }
-}
-
-void Delete (Node* curr, Node* prev, int studID)
-{
-  if (curr == NULL) 
-  {
-    // reached end of list
-    cout << "There's no student with that ID. Nothing has been deleted." << endl;
-  }
-  else if (curr->getStudent()->getStudID() != studID) 
-  {
-    // check next student in list
-    Delete(curr, curr->getNext(), studID);
-  }
+  } 
   else 
-  {
-    prev->setNext(curr->getNext());
-    delete curr;
-    cout << "Student deleted." << endl;
+  { //could not find match
+    cout << "There is no student with that ID!" << endl;
   }
 }
 
-void average(Node* head, int nodeCount)
-{
-  Node* current = head;
-  float sum = 0;
-
-  if (head == NULL) 
-  { 
-      cout << endl << "Cannot average 0 students GPA's, Student's have to be added first." << endl;
-      return;
+void average(Node* next, int count, float nSum) {//Averages
+  if (next != NULL) 
+  {
+    count++;
+    nSum += next->getStudent()->studGPA;//Adds the gpas
+    average(next->getNext(), count, nSum);//Recalls function
   }
   else 
   {
-    sum += current->getStudent()->getGPA(); 
-    while (current->getNext() != NULL) 
-    { 
-      sum += current->getNext()->getStudent()->getGPA();
-      current = current->getNext();
-    }
+    nSum = nSum/count;//Divides
+    cout << fixed << showpoint << setprecision(2) << nSum << endl;//Prints it and sets percision
   }
-  cout << "Average GPA: " << fixed << setprecision(2) << (sum/ nodeCount) << endl;
 }
