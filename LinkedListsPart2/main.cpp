@@ -14,7 +14,7 @@ using namespace std;
 void addStudent(Node* head, Student* newStudent);
 void printStudents(Node* next);
 void deleteStudent(Node* head, int studID);
-void average(Node* next, int count, float nSum);
+void average(Node* next, int count, float sum);
 void displayMenu();
 
 int main() 
@@ -57,10 +57,12 @@ int main()
       cout << "GPA: ";
       cin >> studGPA;
       Student* newStudent = new Student(firstName, lastName, studID, studGPA);
+      //checks if head is null 
       if (head == NULL) 
       {
 	      head = new Node(newStudent);
       }
+      //places it where the ID is greater than studID
       else if (head->getStudent()->getStudID() > studID) 
       {
 	      Node* temp = head;
@@ -130,20 +132,22 @@ void displayMenu()
 	cout << "DELETE--->Type 'DELETE' to delete a student ID number from the record: " << endl;
 	cout << "QUIT--->Type 'QUIT' to exit the program: " << endl;
   cout << "AVERAGE--->Type 'AVERAGE' to print the GPA average of all students:" << endl << endl;
+  cout << "Press enter after the average, print, and quit function executes to see the display menu again" << endl;
 }
 
 //add a new node (holding a new student) to the linked list
 void addStudent(Node* head, Student* newStudent) 
 {
   Node* curr = head;
+  //placinf node where it belongs
   if (curr->getNext() == NULL || curr->getNext()->getStudent()->getStudID() > newStudent->getStudID())
-  { //once at the end, connect the last node to new node
+  {
     Node* newNode = new Node(newStudent);
     newNode->setNext(curr->getNext());
     curr->setNext(newNode);
   } 
   else 
-  { //recursively search
+  { 
     addStudent(head->getNext(), newStudent);
   }
 }
@@ -151,8 +155,9 @@ void addStudent(Node* head, Student* newStudent)
 //print out the student data of every node in the linked list
 void printStudents(Node* next) 
 {
+//if it isnt at the last, print these
   if (next != NULL) 
-  { //while not at the end, print all the data per node then call on next
+  { 
     cout << next->getStudent()->getFirstName();
     cout << " " << next->getStudent()->getLastName();
     cout << ", ID: " << next->getStudent()->getStudID();
@@ -164,8 +169,9 @@ void printStudents(Node* next)
 //delete the node of the student with the given id
 void deleteStudent(Node* current, int studID) 
 {
+  //searches the next node's data if it isn't NULL
   if (current->getNext() != NULL) 
-  { //search the next node's data (as long as it is not NULL)
+  { 
     if (current->getNext()->getStudent()->getStudID() == studID) 
     {
       Node* temp = current->getNext();
@@ -173,26 +179,33 @@ void deleteStudent(Node* current, int studID)
       delete(temp);
     } 
     else 
-    { //recursively search only if no match
+    { 
       deleteStudent(current->getNext(), studID);
     }
   } 
+  //code that executes if no match is found
   else 
-  { //could not find match
-    cout << "There is no student with that ID!" << endl;
+  { 
+    cout << "There is no student with that ID" << endl;
   }
 }
 
-void average(Node* next, int count, float nSum) {//Averages
+//averages
+void average(Node* next, int count, float sum) 
+{
   if (next != NULL) 
   {
     count++;
-    nSum += next->getStudent()->studGPA;//Adds the gpas
-    average(next->getNext(), count, nSum);//Recalls function
+    //adds student's GPA's
+    sum += next->getStudent()->studGPA;
+    //recalls functions
+    average(next->getNext(), count, sum);
   }
   else 
   {
-    nSum = nSum/count;//Divides
-    cout << fixed << showpoint << setprecision(2) << nSum << endl;//Prints it and sets percision
+//divides aum by ct
+    sum = sum/count;
+    //prints the average and setts precision to 2 decimals
+    cout << "Average of the GPA's is: " << fixed << showpoint << setprecision(2) << sum << endl;
   }
 }
